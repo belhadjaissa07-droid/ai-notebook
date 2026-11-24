@@ -1,0 +1,30 @@
+# Local env / secrets (never commit keys)
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+
+# Python
+venv/
+venv311/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Vector DB + runtime artifacts
+data/chroma/
+data/uploads/
+data/sample_docs/_fixtures/
+
+# Explicit Session 3 caches / renders (also covered by data/uploads/)
+**/vision_cache/
+**/page_images/
+**/figures/
+
+# Eval run output
+tests/session3_eval_last_run.json
+tests/session4_eval_last_run.json
+tests/session5_eval_last_run.json
+.pytest_cache/
