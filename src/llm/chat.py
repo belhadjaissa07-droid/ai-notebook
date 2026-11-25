@@ -12,7 +12,7 @@ from google import genai
 from google.genai import types
 
 # Load project .env (repo root), not only cwd.
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(_PROJECT_ROOT / ".env")
 
 DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
@@ -27,15 +27,19 @@ Keep answers focused and educational."""
 _PLACEHOLDER_KEY = "your_key_here"
 
 
-def get_client() -> genai.Client:
-    """Return a Gemini client, or raise if the API key is missing/placeholder."""
+def get_api_key() -> str:
+    """Return the Gemini API key, or raise if it is missing/placeholder."""
     api_key = (os.getenv("GEMINI_API_KEY") or "").strip()
     if not api_key or api_key == _PLACEHOLDER_KEY:
         raise ValueError(
             "GEMINI_API_KEY is missing or still set to 'your_key_here'. "
             "Copy .env.example to .env and set a real key from Google AI Studio."
         )
-    return genai.Client(api_key=api_key)
+    return api_key
+
+
+def get_client() -> genai.Client:
+    return genai.Client(api_key=get_api_key())
 
 
 def _to_contents(

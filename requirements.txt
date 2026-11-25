@@ -1,3 +1,15 @@
-streamlit>=1.40.0
+# Session 1 — chat UI + Gemini LLM
+streamlit>=1.55.0
 google-genai>=1.0.0
 python-dotenv>=1.0.0
+
+# Session 2 — RAG with LangChain + Chroma
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-google-genai
+langchain-chroma
+chromadb
+
+# Tests
+pytest>=8.0.0
