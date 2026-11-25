@@ -1,4 +1,4 @@
-"""Step 1c — Vector store: Chroma on disk, searched by cosine distance."""
+"""Vector store: the Chroma database on disk (cosine), plus list, count and delete."""
 
 from __future__ import annotations
 

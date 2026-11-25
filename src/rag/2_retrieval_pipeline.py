@@ -2,20 +2,14 @@
 
 from __future__ import annotations
 
+from langchain_core.documents import Document
+
 from src.rag.shared.config import DEFAULT_TOP_K
 from src.rag.storage.store import get_vector_store
-from src.rag.shared.types import RetrievedChunk
 
 
-def retrieve(query: str, top_k: int = DEFAULT_TOP_K) -> list[RetrievedChunk]:
-    """Embed the query and return the `top_k` nearest chunks (smaller distance = closer)."""
-    results = get_vector_store().similarity_search_with_score(query, k=top_k)
-    return [
-        RetrievedChunk(
-            text=document.page_content,
-            source=document.metadata["source"],
-            number=document.metadata["chunk"],
-            distance=round(distance, 3),
-        )
-        for document, distance in results
-    ]
+def retrieve(query: str, top_k: int = DEFAULT_TOP_K) -> list[Document]:
+    """Search ChromaDB by cosine similarity and return the k closest chunks."""
+    db = get_vector_store()
+    retriever = db.as_retriever(search_kwargs={"k": top_k})
+    return retriever.invoke(query)

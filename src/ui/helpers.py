@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 
-from src.rag.shared.types import RetrievedChunk
+from langchain_core.documents import Document
 
 
-def citation_chip_label(index: int, chunk: RetrievedChunk) -> str:
-    return f"[{index}] {chunk.source} · chunk {chunk.number}"
+def citation_chip_label(index: int, chunk: Document) -> str:
+    return f"[{index}] {chunk.metadata['source']} · chunk {chunk.metadata['chunk']}"
 
 
 def answer_summary(
-    chunks: Sequence[RetrievedChunk],
+    chunks: Sequence[Document],
     *,
     question: str,
     search_question: str | None,
@@ -23,9 +23,19 @@ def answer_summary(
     parts = []
     if search_question != question:
         parts.append(f"Rewrote your follow-up as “{search_question}”.")
-    sources = ", ".join(sorted({chunk.source for chunk in chunks}))
+    sources = ", ".join(sorted({chunk.metadata["source"] for chunk in chunks}))
     parts.append(f"Read {len(chunks)} excerpt{'s' if len(chunks) != 1 else ''} from {sources}.")
     return " ".join(parts)
+
+
+def stream_once_ready(tokens: Iterable[str], on_first_token: Callable[[], None]) -> Iterator[str]:
+    """Yield the tokens, calling `on_first_token` just before the first one (or at the end if none)."""
+    tokens = iter(tokens)
+    first = next(tokens, None)
+    on_first_token()
+    if first is not None:
+        yield first
+        yield from tokens
 
 
 def starter_prompts(sources: Sequence[str]) -> list[tuple[str, str]]:

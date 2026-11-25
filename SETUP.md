@@ -111,7 +111,7 @@ Your system Python refuses global installs. Pick one:
 
 ## Try it
 
-1. Click **Use the sample course** (a linear-algebra course in French).
+1. Upload the four files of `data/sample_docs/` (a linear-algebra course in French).
 2. Ask: *"Quelles sont les valeurs propres de Q = [[2, 1], [1, 2]] ?"*
 
 ## Run the tests (no API key needed)

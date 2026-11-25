@@ -5,12 +5,13 @@ from __future__ import annotations
 from typing import Any
 
 import streamlit as st
+from langchain_core.documents import Document
 
-from src.rag import RetrievedChunk, format_context
+from src.rag import format_context
 from src.ui.helpers import answer_summary, citation_chip_label
 
 
-def _select_chunk(chunk: RetrievedChunk) -> None:
+def _select_chunk(chunk: Document) -> None:
     st.session_state.selected_chunk = chunk
 
 
@@ -45,9 +46,8 @@ def render_preview_pane() -> None:
     if chunk is None:
         return
     with st.container(border=True, key="preview_pane"):
-        st.markdown(f"**Preview — {chunk.source}, chunk {chunk.number}**")
-        st.caption(f"Cosine distance to the question: {chunk.distance}")
-        st.code(chunk.text, language=None, wrap_lines=True)
+        st.markdown(f"**Preview — {chunk.metadata['source']}, chunk {chunk.metadata['chunk']}**")
+        st.code(chunk.page_content, language=None, wrap_lines=True)
         st.button("Close preview", key="close_preview", on_click=_close_preview)
 
 
@@ -63,11 +63,9 @@ def render_trace_panel(message: dict[str, Any]) -> None:
         st.markdown(
             f"**Settings:** top-k `{message['top_k']}` · temperature `{message['temperature']}`"
         )
-        st.caption("Cosine distance: 0 means the same meaning, larger means less similar.")
         for rank, chunk in enumerate(message["chunks"], start=1):
             st.markdown(
-                f"- rank **{rank}** · `{chunk.source}` · chunk {chunk.number} · "
-                f"distance `{chunk.distance}`"
+                f"- rank **{rank}** · `{chunk.metadata['source']}` · chunk {chunk.metadata['chunk']}"
             )
         st.markdown("**Prompt context** (`format_context` output):")
         st.code(format_context(message["chunks"]), language=None, wrap_lines=True)

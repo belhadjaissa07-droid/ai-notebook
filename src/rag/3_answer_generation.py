@@ -1,59 +1,53 @@
-"""Step 3 — Answer generation: put the retrieved chunks in the prompt and stream the answer."""
+"""Step 3 — Answer generation: put the retrieved chunks in the prompt and let Gemini answer."""
 
 from __future__ import annotations
 
-from collections.abc import Iterator, Mapping, Sequence
-from typing import Any
+from collections.abc import Iterator, Sequence
 
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
+from langchain_core.documents import Document
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
-from src.rag.shared.models import create_chat_model, message_text
-from src.rag.shared.types import RetrievedChunk
+from src.rag.shared.messages import message_text
+from src.rag.shared.models import create_chat_model
 
 NOT_ENOUGH_INFO = "I don't have enough information in the provided documents to answer this question."
 
-GROUNDED_SYSTEM_PROMPT = """You are a friendly Study Tutor for university students.
-Answer from the course excerpts you are given, and explain step by step when it helps.
+SYSTEM_PROMPT = """You are a Study Tutor for university students.
+Rely on the course excerpts and on the conversation history.
 Answer in the language of the student's question."""
 
 
-def to_langchain_messages(history: Sequence[Mapping[str, Any]]) -> list[BaseMessage]:
-    message_types = {"user": HumanMessage, "assistant": AIMessage}
-    return [message_types[turn["role"]](content=turn["content"]) for turn in history]
+def format_context(docs: Sequence[Document]) -> str:
+    return "\n\n".join(f"- {doc.page_content}" for doc in docs)
 
 
-def format_context(chunks: Sequence[RetrievedChunk]) -> str:
-    return "\n\n".join(f"[{number}] {chunk.text}" for number, chunk in enumerate(chunks, start=1))
-
-
-def build_grounded_prompt(question: str, chunks: Sequence[RetrievedChunk]) -> str:
-    """The augmented prompt = the question + the retrieved excerpts."""
-    return f"""Using only the course excerpts below, answer the question.
-
-Question: {question}
+def build_augmented_prompt(question: str, docs: Sequence[Document]) -> str:
+    """The augmented prompt = the question + the retrieved excerpts + instructions."""
+    return f"""Using only the following course excerpts, answer the question clearly: {question}
 
 Course excerpts:
-{format_context(chunks)}
+{format_context(docs)}
 
 Instructions:
-- Use only the information in the excerpts above.
-- When you rely on an excerpt, mention its number, like [1].
-- If the answer is not in the excerpts, reply: "{NOT_ENOUGH_INFO}"
+- Use only the information present in the excerpts above.
+- If the information is not there, reply: "{NOT_ENOUGH_INFO}"
 """
 
 
-def stream_grounded_answer(
-    history: Sequence[Mapping[str, Any]],
+def generate_answer(
     question: str,
-    chunks: Sequence[RetrievedChunk],
-    temperature: float,
+    docs: Sequence[Document],
+    temperature: float = 0.3,
+    chat_history: Sequence[BaseMessage] = (),
 ) -> Iterator[str]:
+    """Ask Gemini and stream the answer piece by piece."""
+    model = create_chat_model(temperature)
     messages = [
-        SystemMessage(content=GROUNDED_SYSTEM_PROMPT),
-        *to_langchain_messages(history),
-        HumanMessage(content=build_grounded_prompt(question, chunks)),
+        SystemMessage(content=SYSTEM_PROMPT),
+        *chat_history,
+        HumanMessage(content=build_augmented_prompt(question, docs)),
     ]
-    for chunk in create_chat_model(temperature).stream(messages):
-        text = message_text(chunk.content)
+    for piece in model.stream(messages):
+        text = message_text(piece.content)
         if text:
             yield text

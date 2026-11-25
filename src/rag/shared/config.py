@@ -8,7 +8,6 @@ from pathlib import Path
 from src.llm import DEFAULT_MODEL
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
-SAMPLE_DOCS_DIR = PROJECT_ROOT / "data" / "sample_docs"
 CHROMA_DIR = PROJECT_ROOT / "data" / "chroma"
 COLLECTION_NAME = "course_docs"
 

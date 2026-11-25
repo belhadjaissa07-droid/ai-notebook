@@ -11,19 +11,18 @@ from src.llm import DEFAULT_MODEL, chat_stream
 from src.rag import (
     CHUNKING_STRATEGIES,
     DEFAULT_TOP_K,
-    SAMPLE_DOCS_DIR,
-    answer_question,
+    ask_question,
     clear_store,
     count_chunks,
     delete_source,
     ingest_documents,
     list_sources,
-    load_text_folder,
-    load_text_upload,
+    load_documents,
+    to_chat_history,
 )
 from src.rag.shared.config import EMBEDDING_MODEL
 from src.ui.theme import apply_theme
-from src.ui.helpers import starter_prompts
+from src.ui.helpers import starter_prompts, stream_once_ready
 
 st.set_page_config(page_title="AI Notebook — Study Tutor", layout="wide")
 apply_theme()
@@ -81,16 +80,21 @@ def index_documents(documents: list, label: str, strategy: str) -> None:
 
 def index_uploaded_files(files: list, strategy: str) -> None:
     indexed = set(list_sources())
+    new_files = []
     for uploaded in files:
         if uploaded.name in indexed:
             flash("info", f"{uploaded.name} is already in the library. Remove it first to re-index it.")
-            continue
-        try:
-            documents = load_text_upload(uploaded.name, uploaded.getvalue())
-        except UnicodeDecodeError:
-            flash("error", f"{uploaded.name} is not a UTF-8 text file.")
-            continue
-        index_documents(documents, uploaded.name, strategy)
+        else:
+            new_files.append(uploaded)
+    if not new_files:
+        return
+    try:
+        documents = load_documents(new_files)
+    except ValueError as exc:
+        flash("error", str(exc))
+        return
+    label = new_files[0].name if len(new_files) == 1 else f"{len(new_files)} documents"
+    index_documents(documents, label, strategy)
 
 
 def render_uploader(location: str):
@@ -120,19 +124,19 @@ def run_chat_turn(prompt: str) -> None:
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
+        thinking = st.empty()
+        thinking.caption("Thinking...")
         try:
             if use_rag:
-                with st.spinner("Searching your documents…"):
-                    rag_answer = answer_question(
-                        history, prompt, top_k=top_k, temperature=temperature
-                    )
-                reply = st.write_stream(rag_answer.tokens)
+                rag_answer = ask_question(
+                    to_chat_history(history), prompt, top_k=top_k, temperature=temperature
+                )
+                tokens = rag_answer.tokens
                 chunks, search_question = rag_answer.chunks, rag_answer.search_question
             else:
-                reply = st.write_stream(
-                    chat_stream(st.session_state.messages, temperature=temperature)
-                )
+                tokens = chat_stream(st.session_state.messages, temperature=temperature)
                 chunks, search_question = [], None
+            reply = st.write_stream(stream_once_ready(tokens, thinking.empty))
         except ValueError as exc:
             st.error(str(exc))
             st.session_state.messages.pop()
@@ -141,6 +145,8 @@ def run_chat_turn(prompt: str) -> None:
             st.error(f"Request failed: {exc}")
             st.session_state.messages.pop()
             return
+        finally:
+            thinking.empty()
 
         message = {
             "role": "assistant",
@@ -226,13 +232,10 @@ main_files: list = []
 if not sources:
     st.subheader("Add a document to begin")
     st.markdown(
-        "Upload your lecture notes as `.txt` files, or start with the sample "
-        "linear-algebra course (4 chapters, in French)."
+        "Upload your lecture notes as `.txt` files. The linear-algebra course in "
+        "`data/sample_docs/` (4 chapters, in French) is a good start."
     )
     main_files = render_uploader("main")
-    if st.button("Use the sample course"):
-        index_documents(load_text_folder(SAMPLE_DOCS_DIR), "the sample course", chunking_strategy)
-        st.rerun()
 
 uploaded_files = main_files or sidebar_files
 if uploaded_files:
