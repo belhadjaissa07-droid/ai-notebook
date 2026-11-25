@@ -10,6 +10,8 @@ from src.rag.storage.store import get_vector_store
 
 def retrieve(query: str, top_k: int = DEFAULT_TOP_K) -> list[Document]:
     """Search ChromaDB by cosine similarity and return the k closest chunks."""
-    db = get_vector_store()
-    retriever = db.as_retriever(search_kwargs={"k": top_k})
-    return retriever.invoke(query)
+    # TODO (workshop):
+    # 1. Connect to the vector database: db = get_vector_store()
+    # 2. Create a retriever: db.as_retriever(search_kwargs={"k": top_k})
+    # 3. Return retriever.invoke(query)
+    raise NotImplementedError("Step 2: implement retrieve")

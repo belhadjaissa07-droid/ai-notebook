@@ -31,15 +31,13 @@ class RagAnswer:
 
 def build_standalone_question(model, chat_history: Sequence[BaseMessage], user_question: str) -> str:
     """Rewrite a follow-up like "and its eigenvectors?" so the search understands it."""
-    if not chat_history:
-        return user_question
-
-    messages = [
-        SystemMessage(content=REWRITE_SYSTEM_PROMPT),
-        *chat_history,
-        HumanMessage(content=f"New question: {user_question}"),
-    ]
-    return message_text(model.invoke(messages).content).strip() or user_question
+    # TODO (workshop):
+    # 1. Without history there is nothing to rewrite: return user_question
+    # 2. messages = [SystemMessage(content=REWRITE_SYSTEM_PROMPT), *chat_history,
+    #    HumanMessage(content=f"New question: {user_question}")]
+    # 3. Ask the model: model.invoke(messages), read the text with
+    #    message_text(response.content).strip(), and fall back to user_question if it is empty
+    raise NotImplementedError("Step 4: implement build_standalone_question")
 
 
 def ask_question(
@@ -50,7 +48,9 @@ def ask_question(
     temperature: float = 0.3,
 ) -> RagAnswer:
     """One full conversational RAG turn. `chat_history` holds the previous turns only."""
-    search_question = build_standalone_question(create_chat_model(), chat_history, user_question)
-    docs = retrieval_pipeline.retrieve(search_question, top_k)
-    tokens = answer_generation.generate_answer(user_question, docs, temperature, chat_history)
-    return RagAnswer(search_question=search_question, chunks=docs, tokens=tokens)
+    # TODO (workshop):
+    # 1. search_question = build_standalone_question(create_chat_model(), chat_history, user_question)
+    # 2. docs = retrieval_pipeline.retrieve(search_question, top_k)
+    # 3. tokens = answer_generation.generate_answer(user_question, docs, temperature, chat_history)
+    # 4. Return RagAnswer(search_question=search_question, chunks=docs, tokens=tokens)
+    raise NotImplementedError("Step 4: implement ask_question")

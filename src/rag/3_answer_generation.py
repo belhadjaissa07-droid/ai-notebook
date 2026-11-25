@@ -23,15 +23,12 @@ def format_context(docs: Sequence[Document]) -> str:
 
 def build_augmented_prompt(question: str, docs: Sequence[Document]) -> str:
     """The augmented prompt = the question + the retrieved excerpts + instructions."""
-    return f"""Using only the following course excerpts, answer the question clearly: {question}
-
-Course excerpts:
-{format_context(docs)}
-
-Instructions:
-- Use only the information present in the excerpts above.
-- If the information is not there, reply: "{NOT_ENOUGH_INFO}"
-"""
+    # TODO (workshop): return one prompt string (an f-string) with
+    # - the question
+    # - the course excerpts: format_context(docs)
+    # - instructions: use only the excerpts, and reply with NOT_ENOUGH_INFO
+    #   when the information is not in them
+    raise NotImplementedError("Step 3: implement build_augmented_prompt")
 
 
 def generate_answer(
@@ -41,13 +38,10 @@ def generate_answer(
     chat_history: Sequence[BaseMessage] = (),
 ) -> Iterator[str]:
     """Ask Gemini and stream the answer piece by piece."""
-    model = create_chat_model(temperature)
-    messages = [
-        SystemMessage(content=SYSTEM_PROMPT),
-        *chat_history,
-        HumanMessage(content=build_augmented_prompt(question, docs)),
-    ]
-    for piece in model.stream(messages):
-        text = message_text(piece.content)
-        if text:
-            yield text
+    # TODO (workshop):
+    # 1. model = create_chat_model(temperature)
+    # 2. messages = [SystemMessage(content=SYSTEM_PROMPT), *chat_history,
+    #    HumanMessage(content=build_augmented_prompt(question, docs))]
+    # 3. for piece in model.stream(messages): read its text with
+    #    message_text(piece.content) and yield it when it is not empty
+    raise NotImplementedError("Step 3: implement generate_answer")
