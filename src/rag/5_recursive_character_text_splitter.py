@@ -14,9 +14,9 @@ def split_documents_recursively(
     chunk_overlap: int = CHUNK_OVERLAP,
 ) -> list[Document]:
     """Try several separators in order until every chunk fits."""
-    # TODO (workshop):
-    # 1. Create a RecursiveCharacterTextSplitter with
-    #    separators: paragraph ("\n\n"), line ("\n"), sentence (". "), word (" "), character ("")
-    #    chunk_size=chunk_size, chunk_overlap=chunk_overlap
-    # 2. Return splitter.split_documents(documents)
-    raise NotImplementedError("Step 5: implement split_documents_recursively")
+    splitter = RecursiveCharacterTextSplitter(
+        separators=["\n\n", "\n", ". ", " ", ""],
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    )
+    return splitter.split_documents(documents)

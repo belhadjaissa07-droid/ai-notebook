@@ -26,12 +26,13 @@ Text:
 
 def split_documents_agentically(documents: list[Document]) -> list[Document]:
     """Long documents are sent window by window to stay within the model's output limit."""
-    # TODO (workshop):
-    # 1. llm = create_chat_model(temperature=0.0)
-    # 2. Send long documents window by window: cut each one with a
-    #    RecursiveCharacterTextSplitter(chunk_size=WINDOW_CHARS, chunk_overlap=0)
-    # 3. For each window: llm.invoke(AGENTIC_PROMPT + window), read the text with
-    #    message_text(response.content)
-    # 4. Split that text on SPLIT_MARKER; every non-empty piece becomes
-    #    Document(page_content=piece.strip(), metadata=document.metadata)
-    raise NotImplementedError("Step 7: implement split_documents_agentically")
+    llm = create_chat_model(temperature=0.0)
+    window_splitter = RecursiveCharacterTextSplitter(chunk_size=WINDOW_CHARS, chunk_overlap=0)
+    chunks: list[Document] = []
+    for document in documents:
+        for window in window_splitter.split_text(document.page_content):
+            marked_text = message_text(llm.invoke(AGENTIC_PROMPT + window).content)
+            for piece in marked_text.split(SPLIT_MARKER):
+                if piece.strip():
+                    chunks.append(Document(page_content=piece.strip(), metadata=document.metadata))
+    return chunks

@@ -36,12 +36,14 @@ class UploadedFile(Protocol):
 
 def load_documents(uploaded_files: Sequence[UploadedFile]) -> list[Document]:
     """Read the .txt files uploaded in the UI as LangChain documents."""
-    # TODO (workshop):
-    # 1. For each uploaded file, read its text: uploaded_file.getvalue().decode("utf-8")
-    #    If it is not UTF-8, raise ValueError(f"{uploaded_file.name} is not a UTF-8 text file.")
-    # 2. Wrap the text in Document(page_content=text, metadata={"source": uploaded_file.name})
-    # 3. Return the list of documents
-    raise NotImplementedError("Step 1: implement load_documents")
+    documents = []
+    for uploaded_file in uploaded_files:
+        try:
+            text = uploaded_file.getvalue().decode("utf-8")
+        except UnicodeDecodeError as error:
+            raise ValueError(f"{uploaded_file.name} is not a UTF-8 text file.") from error
+        documents.append(Document(page_content=text, metadata={"source": uploaded_file.name}))
+    return documents
 
 
 def split_documents(
@@ -50,22 +52,23 @@ def split_documents(
     chunk_overlap: int = CHUNK_OVERLAP,
 ) -> list[Document]:
     """Split the documents into chunks with overlap."""
-    # TODO (workshop):
-    # 1. Create a CharacterTextSplitter: separator="\n\n",
-    #    chunk_size=chunk_size, chunk_overlap=chunk_overlap
-    # 2. Return splitter.split_documents(documents)
-    raise NotImplementedError("Step 1: implement split_documents")
+    splitter = CharacterTextSplitter(
+        separator="\n\n",
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    )
+    return splitter.split_documents(documents)
 
 
 def create_vector_store(chunks: list[Document], persist_directory: str = DB_DIR) -> Chroma:
     """Generate the Gemini embeddings and save them in ChromaDB."""
-    # TODO (workshop): return Chroma.from_documents(...) with
-    # - documents=chunks
-    # - embedding=create_embeddings()
-    # - collection_name=COLLECTION_NAME
-    # - persist_directory=persist_directory
-    # - collection_metadata={"hnsw:space": "cosine"}
-    raise NotImplementedError("Step 1: implement create_vector_store")
+    return Chroma.from_documents(
+        documents=chunks,
+        embedding=create_embeddings(),
+        collection_name=COLLECTION_NAME,
+        persist_directory=persist_directory,
+        collection_metadata={"hnsw:space": "cosine"},
+    )
 
 
 CHUNKING_STRATEGIES: dict[str, Callable[[list[Document]], list[Document]]] = {
