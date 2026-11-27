@@ -1,4 +1,4 @@
-# AI Notebook — Study Tutor (Session 2)
+# AI Notebook — Study Tutor (Session 3)
 
 A Streamlit Study Tutor that answers from **your documents** with RAG
 (Retrieval-Augmented Generation), built on Google Gemini, LangChain and Chroma.
@@ -12,6 +12,12 @@ A Streamlit Study Tutor that answers from **your documents** with RAG
 - Three chunking strategies to compare: Character, Recursive, Agentic (LLM)
 - Source chips open a preview of the exact chunk the answer used
 - Developer trace shows the search question, the retrieved chunks and the prompt context
+
+- Session 3:Multimodal RAG improves performance by using diverse data sources, enabling better understanding and more accurate responses.
+
+  - Enhances contextual understanding by combining textual and non textual data.
+  - Improves content generation with richer, more relevant and engaging outputs.
+  - Increases accuracy by retrieving and using information from multiple sources
 
 ## Setup
 
@@ -54,5 +60,31 @@ src/rag/
 data/sample_docs/       Sample course (4 chapters on matrices, French)
 docs/session-2.md       Learner guide for this session
 ```
+## Multimodal RAG Study Tutor (branch `feature/multimodal-rag`)
 
-Later sessions will add multimodal RAG, agents and guardrails.
+`src/rag/multimodal/` = numbered lesson scripts + `shared/` (the code they all use).
+Search the summary, send the original.
+
+| Step | Script | Idea | Code it leans on |
+|---|---|---|---|
+| 0 | `0_make_sample_pdf.py` | PDF whose answers live in charts and a table | - |
+| 1 | `1_parse_pdf.py` | text / table / image / vector figure + captions | - |
+| 2 | `2_caption_images.py` | vision LLM writes searchable summaries | `shared/config.py` (ask) |
+| 3 | `3_clip_joint_embedding.py` | one vector space for text and images | `shared/rag.py` (clip) |
+| 4 | `4_mm_ingestion_pipeline.py` | multi-vector index | `shared/rag.py` (index) |
+| 5 | `5_mm_retrieval_pipeline.py` | filters + rank fusion | `shared/rag.py` (retrieve, rrf) |
+| 6 | `6_mm_answer_generation.py` | text + image prompt, 3 modes | `shared/rag.py` (parts), `shared/tutor.py` |
+| 7 | `7_mm_history_aware_generation.py` | tutor chat, image questions, /quiz | `shared/tutor.py` |
+| 8 | `pages/1_Multimodal_RAG.py` | Streamlit Study Tutor page | `shared/tutor.py` |
+
+```bash
+git checkout -b feature/multimodal-rag
+pip install -r requirements.txt -r requirements-multimodal.txt   # + GEMINI_API_KEY in .env
+python src/rag/multimodal/0_make_sample_pdf.py && python src/rag/multimodal/1_parse_pdf.py
+python src/rag/multimodal/2_caption_images.py && python src/rag/multimodal/4_mm_ingestion_pipeline.py
+python src/rag/multimodal/6_mm_answer_generation.py -q "Which quarter had the highest solar output?" --mode text
+python src/rag/multimodal/6_mm_answer_generation.py -q "Which quarter had the highest solar output?"
+python src/rag/multimodal/7_mm_history_aware_generation.py     # /quiz solar, /image path question
+streamlit run app.py                                            # page: Study Tutor
+pytest tests/test_multimodal.py -v
+```

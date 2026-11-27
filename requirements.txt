@@ -10,5 +10,12 @@ langchain-google-genai
 langchain-chroma
 chromadb
 
+# Session 3 - Multimodal RAG
+pymupdf>=1.24.3          # PDF parsing: text blocks, tables, images, vector figures
+pillow>=10.0             # image handling / PNG normalisation
+numpy>=1.26
+sentence-transformers>=3.0   # OPTIONAL: only for step 3 and --with-clip / --clip (pulls in torch)
+
+
 # Tests
 pytest>=8.0.0
