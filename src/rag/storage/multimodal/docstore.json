@@ -1,0 +1,62 @@
+{
+ "p2-image-1": {
+  "id": "p2-image-1",
+  "type": "image",
+  "page": 2,
+  "bbox": [
+   56.0,
+   120.0,
+   539.0,
+   421.9
+  ],
+  "content": "",
+  "caption": "Figure 1: Quarterly renewable output by technology, 2025 (GWh).",
+  "image_path": "src/rag/storage/multimodal/images/p2_image_1.png",
+  "summary": "This is a grouped bar chart titled \"Quarterly renewable output 2025 (GWh)\". The horizontal axis represents the four quarters of the year: Q1, Q2, Q3, and Q4. The vertical axis represents renewable output in GWh. There is no legend provided to identify the two colors (yellow and blue).\n\nThe values for the yellow bars are: 120 (Q1), 310 (Q2), 380 (Q3), and 140 (Q4).\nThe values for the blue bars are: 210 (Q1), 150 (Q2), 90 (Q3), and 260 (Q4).\n\nThe maximum value is 380 GWh (yellow bar, Q3).\nThe minimum value is 90 GWh (blue bar, Q3).\nThe yellow bars show an upward trend from Q1 to Q3 before declining in Q4, while the blue bars show a downward trend from Q1 to Q3 before increasing in Q4.\n\nCaption: Figure 1: Quarterly renewable output by technology, 2025 (GWh)."
+ },
+ "p3-table-1": {
+  "id": "p3-table-1",
+  "type": "table",
+  "page": 3,
+  "bbox": [
+   56.0,
+   120.0,
+   536.0,
+   240.0
+  ],
+  "content": "| Region | Solar (MW) | Wind (MW) | Storage (MWh) |\n|---|---|---|---|\n| Tunisia | 420 | 180 | 60 |\n| Morocco | 510 | 340 | 120 |\n| Spain | 380 | 260 | 90 |\n| Italy | 150 | 310 | 40 |",
+  "caption": "Table 1: Installed capacity by region (MW).",
+  "image_path": null,
+  "summary": "Table 1: Installed capacity by region (MW). This table details renewable energy capacity across Tunisia, Morocco, Spain, and Italy. It tracks Solar (MW), Wind (MW), and Storage (MWh). Morocco holds the highest values for Solar (510 MW) and Storage (120 MWh), while Italy records the highest Wind capacity (310 MW). Conversely, Italy has the lowest Solar (150 MW) and Storage (40 MWh) values, and Tunisia reports the lowest Wind capacity (180 MW)."
+ },
+ "p3-figure-1": {
+  "id": "p3-figure-1",
+  "type": "image",
+  "page": 3,
+  "bbox": [
+   32.0,
+   288.0,
+   460.0,
+   474.0
+  ],
+  "content": "",
+  "caption": "Figure 2: Grid uptime by region, 2025 (%).",
+  "image_path": "src/rag/storage/multimodal/images/p3_figure_1.png",
+  "summary": "This is a bar chart titled \"Figure 2: Grid uptime by region, 2025 (%)\". The horizontal axis lists four categories: Tunisia, Morocco, Spain, and Italy. The vertical axis represents the percentage of grid uptime.\n\nThe values for each category are as follows:\n- Tunisia: 97.1\n- Morocco: 98.4\n- Spain: 99.2\n- Italy: 95.6\n\nThe maximum value is 99.2, corresponding to Spain. The minimum value is 95.6, corresponding to Italy. The data shows that all four regions maintain a grid uptime above 95%, with Spain having the highest performance and Italy having the lowest among those listed."
+ },
+ "p1-chunk-1": {
+  "type": "text",
+  "page": 1,
+  "content": "GreenGrid Annual Report 2025\n\nGreenGrid operates solar farms and onshore wind parks across North Africa and Southern Europe. In 2025 we focused on grid reliability, storage and operating cost reduction.\n\nProduction followed seasonal patterns: solar rises in the warm months while wind is stronger in winter. Detailed quarterly figures are shown in Figure 1 on the next page. We do not restate the individual numbers in the text.\n\nOutlook: we plan to add battery storage at three sites in 2026 and extend predictive maintenance to every turbine. There were no lost-time incidents during the year."
+ },
+ "p2-chunk-1": {
+  "type": "text",
+  "page": 2,
+  "content": "1. Energy output\n\nFigure 1: Quarterly renewable output by technology, 2025 (GWh)."
+ },
+ "p3-chunk-1": {
+  "type": "text",
+  "page": 3,
+  "content": "2. Capacity and reliability\n\nTable 1: Installed capacity by region (MW).\n\nGrid uptime by region, 2025 (%)\n\nFigure 2: Grid uptime by region, 2025 (%)."
+ }
+}

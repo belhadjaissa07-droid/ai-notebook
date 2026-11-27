@@ -1,0 +1,187 @@
+{
+ "source": "greengrid_report_2025.pdf",
+ "elements": [
+  {
+   "id": "p1-text-1",
+   "type": "text",
+   "page": 1,
+   "bbox": [
+    56.0,
+    56.5,
+    377.5,
+    86.8
+   ],
+   "content": "GreenGrid Annual Report 2025",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p1-text-2",
+   "type": "text",
+   "page": 1,
+   "bbox": [
+    56.0,
+    110.0,
+    537.8,
+    141.4
+   ],
+   "content": "GreenGrid operates solar farms and onshore wind parks across North Africa and Southern Europe. In 2025 we focused on grid reliability, storage and operating cost reduction.",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p1-text-3",
+   "type": "text",
+   "page": 1,
+   "bbox": [
+    56.0,
+    210.0,
+    518.8,
+    257.6
+   ],
+   "content": "Production followed seasonal patterns: solar rises in the warm months while wind is stronger in winter. Detailed quarterly figures are shown in Figure 1 on the next page. We do not restate the individual numbers in the text.",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p1-text-4",
+   "type": "text",
+   "page": 1,
+   "bbox": [
+    56.0,
+    310.0,
+    526.8,
+    341.4
+   ],
+   "content": "Outlook: we plan to add battery storage at three sites in 2026 and extend predictive maintenance to every turbine. There were no lost-time incidents during the year.",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p2-image-1",
+   "type": "image",
+   "page": 2,
+   "bbox": [
+    56.0,
+    120.0,
+    539.0,
+    421.9
+   ],
+   "content": "",
+   "caption": "Figure 1: Quarterly renewable output by technology, 2025 (GWh).",
+   "image_path": "src/rag/storage/multimodal/images/p2_image_1.png"
+  },
+  {
+   "id": "p2-text-1",
+   "type": "text",
+   "page": 2,
+   "bbox": [
+    56.0,
+    62.9,
+    182.2,
+    84.9
+   ],
+   "content": "1. Energy output",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p2-text-2",
+   "type": "text",
+   "page": 2,
+   "bbox": [
+    56.0,
+    433.1,
+    346.1,
+    446.9
+   ],
+   "content": "Figure 1: Quarterly renewable output by technology, 2025 (GWh).",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p3-table-1",
+   "type": "table",
+   "page": 3,
+   "bbox": [
+    56.0,
+    120.0,
+    536.0,
+    240.0
+   ],
+   "content": "| Region | Solar (MW) | Wind (MW) | Storage (MWh) |\n|---|---|---|---|\n| Tunisia | 420 | 180 | 60 |\n| Morocco | 510 | 340 | 120 |\n| Spain | 380 | 260 | 90 |\n| Italy | 150 | 310 | 40 |",
+   "caption": "Table 1: Installed capacity by region (MW).",
+   "image_path": null
+  },
+  {
+   "id": "p3-figure-1",
+   "type": "image",
+   "page": 3,
+   "bbox": [
+    32.0,
+    288.0,
+    460.0,
+    474.0
+   ],
+   "content": "",
+   "caption": "Figure 2: Grid uptime by region, 2025 (%).",
+   "image_path": "src/rag/storage/multimodal/images/p3_figure_1.png"
+  },
+  {
+   "id": "p3-text-1",
+   "type": "text",
+   "page": 3,
+   "bbox": [
+    56.0,
+    62.9,
+    248.1,
+    84.9
+   ],
+   "content": "2. Capacity and reliability",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p3-text-2",
+   "type": "text",
+   "page": 3,
+   "bbox": [
+    56.0,
+    97.2,
+    245.5,
+    111.0
+   ],
+   "content": "Table 1: Installed capacity by region (MW).",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p3-text-3",
+   "type": "text",
+   "page": 3,
+   "bbox": [
+    56.0,
+    276.2,
+    221.0,
+    291.4
+   ],
+   "content": "Grid uptime by region, 2025 (%)",
+   "caption": "",
+   "image_path": null
+  },
+  {
+   "id": "p3-text-4",
+   "type": "text",
+   "page": 3,
+   "bbox": [
+    56.0,
+    479.2,
+    242.7,
+    493.0
+   ],
+   "content": "Figure 2: Grid uptime by region, 2025 (%).",
+   "caption": "",
+   "image_path": null
+  }
+ ]
+}
